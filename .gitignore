@@ -1,0 +1,32 @@
+# Ignore virtual environments
+venv*/
+
+# Ignore pycache
+__pycache__/
+*.pyc
+.ruff_cache/
+
+# Ignore build
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Ignore data files
+*.db
+*.txt
+*.csv
+*.xlsx
+*.json
+*.pkl
+*.npy
+
+# Ignore old files
+old_files/
+
+# Ignore environment variables
+.env
+.vscode
+
+# Allow requirements.txt
+!requirements.txt

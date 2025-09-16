@@ -193,6 +193,7 @@ class BinanceDataFetcher:
         for i, symbol in enumerate(symbols, 1):
             logger.info(f"Processing {symbol} ({i}/{len(symbols)})")
             results[symbol] = self.fetch_historical_data(symbol, interval)
+            time.sleep(SLEEP_SECONDS)
 
         # Summary
         successful = sum(results.values())

@@ -9,11 +9,11 @@ REQUEST_TIMEOUT: Final[int] = 10
 
 # Rate Limiting
 API_LIMIT: Final[int] = 499  # Maximum number of klines per request
-SLEEP_SECONDS: Final[float] = 0.2  # Delay between requests to respect rate limits
+SLEEP_SECONDS: Final[float] = 0.25  # Delay between requests to respect rate limits  # 0.142857
 
 # Retry Configuration
 MAX_RETRIES: Final[int] = 5
-RETRY_DELAY: Final[float] = 3.0
+RETRY_DELAY: Final[float] = 600
 
 # File Configuration
 DATA_DIR: Final[Path] = Path("raw_data")

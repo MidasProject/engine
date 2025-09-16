@@ -39,6 +39,9 @@ dependencies = [
 # Tooling configuration
 # ---------------------------
 
+[tool.setuptools.packages.find]
+include = ["app*", "data*", "types*", "config*", "engine*"]
+
 [tool.black]
 line-length = 120
 # Preserve encoding declarations for files with non-ASCII content
@@ -78,11 +81,8 @@ ignore = [
   "E501",  # Let Black handle line length
   "UP009",  # keep encoding declarations
   # TEMPORARY IGNORES - TODO: Fix these complexity issues in future refactoring
-  "PLR0911",  # Too many return statements (> 6)
-  "PLR0912",  # Too many branches (> 12)
-  "PLR0913",  # Too many arguments (> 5)
-  "PLR0915",  # Too many statements (> 50)
+  # "PLR0911",  # Too many return statements (> 6)
+  # "PLR0912",  # Too many branches (> 12)
+  # "PLR0913",  # Too many arguments (> 5)
+  # "PLR0915",  # Too many statements (> 50)
 ]
-
-[tool.setuptools.packages.find]
-include = ["app*", "data*", "types*", "config*", "engine*"]

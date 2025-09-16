@@ -3,7 +3,7 @@
 from datetime import datetime
 
 from ..enums import TradeStatus
-from ..models import OrderData, PositionData, TradeData, TradeParams
+from ..models import TradeData, TradeFromOrderPositionParams, TradeParams
 
 
 class TradeFactory:
@@ -18,23 +18,23 @@ class TradeFactory:
         self._trade_counter += 1
         return f"trade_{self._trade_counter}"
 
-    def create_trade_from_order_and_position(self, order: OrderData, position: PositionData, symbol: str) -> TradeData:
+    def create_trade_from_order_and_position(self, params: TradeFromOrderPositionParams) -> TradeData:
         """Create a trade from an order and position."""
         return TradeData(
             trade_id=self._generate_trade_id(),
-            symbol=symbol,
-            entry_order_type=order.order_type,
-            entry_side=order.side,
-            entry_quantity=order.quantity,
-            entry_price=position.entry_price,
-            entry_time=order.created_at or datetime.now(),
-            entry_order_id=order.order_id,
-            position_side=position.side,
-            leverage=position.leverage,
-            position_id=position.position_id,
+            symbol=params.symbol,
+            entry_order_type=params.order.order_type,
+            entry_side=params.order.side,
+            entry_quantity=params.order.quantity,
+            entry_price=params.position.entry_price,
+            entry_time=params.order.created_at or datetime.now(),
+            entry_order_id=params.order.order_id,
+            position_side=params.position.side,
+            leverage=params.position.leverage,
+            position_id=params.position.position_id,
             status=TradeStatus.OPEN,
-            max_price=position.entry_price,
-            min_price=position.entry_price,
+            max_price=params.position.entry_price,
+            min_price=params.position.entry_price,
         )
 
     def create_trade(self, params: TradeParams) -> TradeData:

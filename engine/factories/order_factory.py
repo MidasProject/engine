@@ -1,16 +1,19 @@
 """Factory for creating different order types."""
 
 from datetime import datetime
-from decimal import Decimal
 
 from ..enums import OrderSide, OrderType
 from ..models import (
     LimitOrderData,
+    LimitOrderParams,
+    MarketOrderParams,
     OrderData,
     StopLimitOrderData,
     StopLimitOrderParams,
     StopMarketOrderData,
+    StopMarketOrderParams,
     TakeProfitOrderData,
+    TakeProfitOrderParams,
 )
 
 
@@ -26,46 +29,40 @@ class OrderFactory:
         self._order_counter += 1
         return f"order_{self._order_counter}"
 
-    def create_market_order(
-        self, symbol: str, side: OrderSide, quantity: Decimal, client_order_id: str | None = None
-    ) -> OrderData:
+    def create_market_order(self, params: MarketOrderParams) -> OrderData:
         """Create a market order."""
         return OrderData(
-            symbol=symbol,
-            side=side,
-            quantity=quantity,
+            symbol=params.symbol,
+            side=OrderSide.BUY if params.side.upper() == "BUY" else OrderSide.SELL,
+            quantity=params.quantity,
             order_id=self._generate_order_id(),
             order_type=OrderType.MARKET,
-            client_order_id=client_order_id,
+            client_order_id=params.client_order_id,
             created_at=datetime.now(),
         )
 
-    def create_limit_order(
-        self, symbol: str, side: OrderSide, quantity: Decimal, price: Decimal, client_order_id: str | None = None
-    ) -> LimitOrderData:
+    def create_limit_order(self, params: LimitOrderParams) -> LimitOrderData:
         """Create a limit order."""
         return LimitOrderData(
-            symbol=symbol,
-            side=side,
-            quantity=quantity,
+            symbol=params.symbol,
+            side=OrderSide.BUY if params.side.upper() == "BUY" else OrderSide.SELL,
+            quantity=params.quantity,
             order_id=self._generate_order_id(),
-            price=price,
-            client_order_id=client_order_id,
+            price=params.price,
+            client_order_id=params.client_order_id,
             created_at=datetime.now(),
         )
 
-    def create_stop_market_order(
-        self, symbol: str, side: OrderSide, quantity: Decimal, stop_price: Decimal, client_order_id: str | None = None
-    ) -> StopMarketOrderData:
+    def create_stop_market_order(self, params: StopMarketOrderParams) -> StopMarketOrderData:
         """Create a stop market order."""
         return StopMarketOrderData(
-            symbol=symbol,
-            side=side,
-            quantity=quantity,
+            symbol=params.symbol,
+            side=OrderSide.BUY if params.side.upper() == "BUY" else OrderSide.SELL,
+            quantity=params.quantity,
             order_id=self._generate_order_id(),
-            stop_price=stop_price,
+            stop_price=params.stop_price,
             order_type=OrderType.STOP_MARKET,
-            client_order_id=client_order_id,
+            client_order_id=params.client_order_id,
             created_at=datetime.now(),
         )
 
@@ -82,16 +79,14 @@ class OrderFactory:
             created_at=datetime.now(),
         )
 
-    def create_take_profit_order(
-        self, symbol: str, side: OrderSide, quantity: Decimal, target_price: Decimal, client_order_id: str | None = None
-    ) -> TakeProfitOrderData:
+    def create_take_profit_order(self, params: TakeProfitOrderParams) -> TakeProfitOrderData:
         """Create a take profit order."""
         return TakeProfitOrderData(
-            symbol=symbol,
-            side=side,
-            quantity=quantity,
+            symbol=params.symbol,
+            side=OrderSide.BUY if params.side.upper() == "BUY" else OrderSide.SELL,
+            quantity=params.quantity,
             order_id=self._generate_order_id(),
-            target_price=target_price,
-            client_order_id=client_order_id,
+            target_price=params.target_price,
+            client_order_id=params.client_order_id,
             created_at=datetime.now(),
         )

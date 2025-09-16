@@ -1,10 +1,41 @@
 """Trade data models for backtesting results."""
 
+from __future__ import annotations
+
 from dataclasses import dataclass
 from datetime import datetime
 from decimal import Decimal
+from typing import TYPE_CHECKING
 
 from ..enums import OrderSide, OrderType, PositionSide, TradeStatus
+
+if TYPE_CHECKING:
+    from .orders import OrderData
+    from .positions import PositionData
+
+
+@dataclass
+class TradeFromOrderPositionParams:
+    """Parameters for creating a trade from order and position."""
+
+    order: OrderData
+    position: PositionData
+    symbol: str
+
+
+@dataclass
+class TradeParams:
+    """Parameters for creating a trade."""
+
+    symbol: str
+    entry_order_type: str
+    entry_side: str
+    entry_quantity: Decimal
+    entry_price: Decimal
+    entry_order_id: str
+    position_side: str
+    leverage: int
+    position_id: str
 
 
 @dataclass

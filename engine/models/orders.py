@@ -8,6 +8,61 @@ from ..enums import OrderSide, OrderStatus, OrderType
 
 
 @dataclass
+class MarketOrderParams:
+    """Parameters for creating a market order."""
+
+    symbol: str
+    side: str
+    quantity: Decimal
+    client_order_id: str | None = None
+
+
+@dataclass
+class LimitOrderParams:
+    """Parameters for creating a limit order."""
+
+    symbol: str
+    side: str
+    quantity: Decimal
+    price: Decimal
+    client_order_id: str | None = None
+
+
+@dataclass
+class StopMarketOrderParams:
+    """Parameters for creating a stop market order."""
+
+    symbol: str
+    side: str
+    quantity: Decimal
+    stop_price: Decimal
+    client_order_id: str | None = None
+
+
+@dataclass
+class StopLimitOrderParams:
+    """Parameters for creating a stop limit order."""
+
+    symbol: str
+    side: str
+    quantity: Decimal
+    stop_price: Decimal
+    limit_price: Decimal
+    client_order_id: str | None = None
+
+
+@dataclass
+class TakeProfitOrderParams:
+    """Parameters for creating a take profit order."""
+
+    symbol: str
+    side: str
+    quantity: Decimal
+    target_price: Decimal
+    client_order_id: str | None = None
+
+
+@dataclass
 class OrderData:
     """Base order data structure.
 

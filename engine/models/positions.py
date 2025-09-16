@@ -8,6 +8,18 @@ from ..enums import PositionSide, PositionStatus
 
 
 @dataclass
+class PositionParams:
+    """Parameters for creating a position."""
+
+    symbol: str
+    side: str
+    size: Decimal
+    entry_price: Decimal
+    leverage: int
+    position_id: str
+
+
+@dataclass
 class PositionData:
     """Core position data structure.
 

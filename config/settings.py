@@ -1,7 +1,12 @@
 """Configuration settings for MidasEngine data fetching."""
 
+import os
 from pathlib import Path
-from typing import Final
+from typing import Any, Final
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # API Configuration
 BINANCE_BASE_URL: Final[str] = "https://fapi.binance.com/fapi/v1/klines"
@@ -61,3 +66,15 @@ KLINE_HEADERS: Final[list[str]] = [
     "taker_buy_quote",
     "ignore",
 ]
+
+# Database Configuration
+DB_CONFIG: Final[dict[str, Any]] = {
+    "host": os.getenv("DB_HOST"),
+    "port": os.getenv("DB_PORT"),
+    "database": os.getenv("DB_NAME"),
+    "user": os.getenv("DB_USER"),
+    "password": os.getenv("DB_PASSWORD"),
+}
+
+# Database Batch Processing
+DB_BATCH_SIZE: Final[int] = 1000

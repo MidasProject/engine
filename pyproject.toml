@@ -22,6 +22,7 @@ dependencies = [
   "openpyxl",
   "pandas",
   "pre-commit",
+  "psycopg2-binary",
   "pyarrow",
   "pydantic",
   "python-dotenv",

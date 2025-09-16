@@ -5,13 +5,16 @@ This module provides common database operations and utilities
 for working with the PostgreSQL database with 15 tables per symbol.
 """
 
+# Standard library imports
 import logging
 from datetime import datetime
 from typing import Any
 
+# Third-party imports
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
+# Local imports
 from config.settings import DB_CONFIG
 from data.db_initialize import SUPPORTED_INTERVALS, get_table_name
 

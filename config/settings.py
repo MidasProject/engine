@@ -1,9 +1,11 @@
 """Configuration settings for MidasEngine data fetching."""
 
+# Standard library imports
 import os
 from pathlib import Path
 from typing import Any, Final
 
+# Third-party imports
 from dotenv import load_dotenv
 
 load_dotenv()

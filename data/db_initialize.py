@@ -5,14 +5,17 @@ from the raw_data directory into the database. Creates 15 separate tables
 per symbol for optimal chart rendering performance.
 """
 
+# Standard library imports
 import csv
 import logging
 from pathlib import Path
 from typing import Any
 
+# Third-party imports
 import psycopg2
 from psycopg2.extras import execute_values
 
+# Local imports
 from config.settings import DATA_DIR, DB_BATCH_SIZE, DB_CONFIG, KLINE_HEADERS
 
 # Configure logging

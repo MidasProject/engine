@@ -4,14 +4,17 @@ This module handles incremental updates to keep the database current
 with new market data from Binance Futures API.
 """
 
+# Standard library imports
 import logging
 import time
 from typing import Any
 
+# Third-party imports
 import psycopg2
 import requests
 from psycopg2.extras import execute_values
 
+# Local imports
 from config.settings import (
     API_LIMIT,
     BINANCE_BASE_URL,

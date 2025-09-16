@@ -10,16 +10,20 @@ from .candles import Candle
 from .fees import Fee, FeeConfig
 from .orders import (
     LimitOrderData,
+    LimitOrderParams,
+    MarketOrderParams,
     OrderData,
     StopLimitOrderData,
+    StopLimitOrderParams,
     StopMarketOrderData,
+    StopMarketOrderParams,
     StopOrderData,
     TakeProfitOrderData,
+    TakeProfitOrderParams,
 )
-from .position_params import PositionParams, StopLimitOrderParams, TradeParams
-from .positions import PositionData
+from .positions import PositionData, PositionParams
 from .results import BacktestMetrics, BacktestResultData
-from .trades import TradeData
+from .trades import TradeData, TradeFromOrderPositionParams, TradeParams
 
 __all__ = [
     "AccountData",
@@ -30,14 +34,19 @@ __all__ = [
     "Fee",
     "FeeConfig",
     "LimitOrderData",
+    "LimitOrderParams",
+    "MarketOrderParams",
     "OrderData",
     "PositionData",
     "PositionParams",
     "StopLimitOrderData",
     "StopLimitOrderParams",
     "StopMarketOrderData",
+    "StopMarketOrderParams",
     "StopOrderData",
     "TakeProfitOrderData",
+    "TakeProfitOrderParams",
     "TradeData",
+    "TradeFromOrderPositionParams",
     "TradeParams",
 ]

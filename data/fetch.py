@@ -4,6 +4,7 @@ This module fetches historical kline (candlestick) data from Binance Futures API
 and saves it to CSV files for further analysis.
 """
 
+# Standard library imports
 import csv
 import logging
 import time
@@ -11,9 +12,11 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+# Third-party imports
 import requests
 from tqdm import tqdm
 
+# Local imports
 from config.settings import (
     API_LIMIT,
     BINANCE_BASE_URL,

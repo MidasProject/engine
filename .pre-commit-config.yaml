@@ -2,27 +2,27 @@
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
-      - id: trailing-whitespace # 각 코드 줄 단위로 마지막에 있는 공백 제거
-      - id: end-of-file-fixer # 파일 끝에 빈 줄 추가
-      - id: check-yaml # YAML 파일 검증
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+
+  - repo: https://github.com/psf/black
+    rev: 25.1.0
+    hooks:
+      - id: black
+        language_version: python3.13
+
+  # - repo: https://github.com/PyCQA/isort
+  #   rev: 6.0.1
+  #   hooks:
+  #     - id: isort
+  #       language_version: python3.13
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.13.0  # Ruff version.
+    rev: v0.13.0
     hooks:
       - id: ruff-check  # Run the linter.
         args: [ --fix ]
       - id: ruff-format  # Run the formatter.
-
-  # - repo: https://github.com/psf/black
-  #   rev: 25.1.0
-  #   hooks:
-  #     - id: black
-  #       language_version: python3.13
-
-  # - repo: https://github.com/PyCQA/isort
-  #   rev: 6.0.0
-  #   hooks:
-  #     - id: isort # 자동으로 import 순서 정렬
-  #       language_version: python3.13

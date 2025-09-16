@@ -16,6 +16,8 @@ from engine import (
     Candle,
     EngineComponentFactory,
     FeeConfig,
+    IndicatorUtils,
+    MovingAverages,
     OrderData,
     OrderSide,
     OrderType,
@@ -38,30 +40,22 @@ class SimpleMovingAverageStrategy(Strategy):
         )
         self.short_period = short_period
         self.long_period = long_period
-        self.price_history = []
+        self.candle_history = []
         self.position_open = False
-
-    def calculate_sma(self, period: int) -> Decimal | None:
-        """Calculate Simple Moving Average."""
-        if len(self.price_history) < period:
-            return None
-
-        recent_prices = self.price_history[-period:]
-        return sum(recent_prices) / period
 
     def on_candle(self, candle: Candle, account: AccountData) -> list[OrderData]:
         """Process new candle and generate trading signals."""
-        # Add current price to history
-        self.price_history.append(candle.close)
+        # Add current candle to history
+        self.candle_history.append(candle)
 
         # Keep only the data we need
         max_history = max(self.short_period, self.long_period) + 1
-        if len(self.price_history) > max_history:
-            self.price_history = self.price_history[-max_history:]
+        if len(self.candle_history) > max_history:
+            self.candle_history = self.candle_history[-max_history:]
 
-        # Calculate moving averages
-        short_ma = self.calculate_sma(self.short_period)
-        long_ma = self.calculate_sma(self.long_period)
+        # Calculate moving averages using the new technical indicators
+        short_ma = MovingAverages.sma_from_candles(self.candle_history, self.short_period, "close")
+        long_ma = MovingAverages.sma_from_candles(self.candle_history, self.long_period, "close")
 
         orders = []
 
@@ -69,38 +63,48 @@ class SimpleMovingAverageStrategy(Strategy):
         if short_ma is None or long_ma is None:
             return orders
 
-        # Get previous MAs for crossover detection
-        if len(self.price_history) >= max(self.short_period, self.long_period) + 1:
-            prev_short_ma = self.calculate_sma(self.short_period)
-            prev_long_ma = self.calculate_sma(self.long_period)
+        # Calculate previous MAs for crossover detection
+        if len(self.candle_history) >= max(self.short_period, self.long_period) + 1:
+            prev_candles = self.candle_history[:-1]  # All but the last candle
+            prev_short_ma = MovingAverages.sma_from_candles(prev_candles, self.short_period, "close")
+            prev_long_ma = MovingAverages.sma_from_candles(prev_candles, self.long_period, "close")
 
-            # Buy signal: short MA crosses above long MA
-            if not self.position_open and short_ma > long_ma and prev_short_ma <= prev_long_ma:
-                # Create a market buy order
-                order = OrderData(
-                    symbol="BTCUSDT",
-                    side=OrderSide.BUY,
-                    quantity=Decimal("0.01"),  # Small position size
-                    order_id="",  # Will be set by order manager
-                    order_type=OrderType.MARKET,
-                    created_at=datetime.now(),
-                )
-                orders.append(order)
-                self.position_open = True
+            if prev_short_ma is not None and prev_long_ma is not None:
+                # Create MA lists for crossover detection
+                short_ma_list = [prev_short_ma, short_ma]
+                long_ma_list = [prev_long_ma, long_ma]
 
-            # Sell signal: short MA crosses below long MA
-            elif self.position_open and short_ma < long_ma and prev_short_ma >= prev_long_ma:
-                # Create a market sell order
-                order = OrderData(
-                    symbol="BTCUSDT",
-                    side=OrderSide.SELL,
-                    quantity=Decimal("0.01"),
-                    order_id="",
-                    order_type=OrderType.MARKET,
-                    created_at=datetime.now(),
-                )
-                orders.append(order)
-                self.position_open = False
+                # Use IndicatorUtils for crossover detection
+                bullish_crossover = IndicatorUtils.crossover(short_ma_list, long_ma_list)
+                bearish_crossover = IndicatorUtils.crossunder(short_ma_list, long_ma_list)
+
+                # Buy signal: bullish crossover
+                if not self.position_open and bullish_crossover:
+                    # Create a market buy order
+                    order = OrderData(
+                        symbol="BTCUSDT",
+                        side=OrderSide.BUY,
+                        quantity=Decimal("0.01"),  # Small position size
+                        order_id="",  # Will be set by order manager
+                        order_type=OrderType.MARKET,
+                        created_at=datetime.now(),
+                    )
+                    orders.append(order)
+                    self.position_open = True
+
+                # Sell signal: bearish crossover
+                elif self.position_open and bearish_crossover:
+                    # Create a market sell order
+                    order = OrderData(
+                        symbol="BTCUSDT",
+                        side=OrderSide.SELL,
+                        quantity=Decimal("0.01"),
+                        order_id="",
+                        order_type=OrderType.MARKET,
+                        created_at=datetime.now(),
+                    )
+                    orders.append(order)
+                    self.position_open = False
 
         return orders
 
